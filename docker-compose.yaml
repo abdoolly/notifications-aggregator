@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+  db:
+    image: mysql:8.0.22
+    container_name: mysql_phrase
+    env_file: .env
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: $DB_PASSWORD
+      MYSQL_USER: $DB_USERNAME
+      MYSQL_PASSWORD: $DB_PASSWORD
+      MYSQL_DATABASE: $DB_NAME
+      MYSQL_ROOT_HOST: $DB_HOST
+    volumes:
+      - phrase-db-volume:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:4.9
+    container_name: phpmyadmin
+    env_file: .env
+    ports:
+      - 8080:80
+    environment:
+      MYSQL_USER: $DB_USERNAME
+      MYSQL_PASSWORD: $DB_PASSWORD
+      PMA_PORT: $DB_PORT
+      MYSQL_DATABASE: $DB_NAME
+      UPLOAD_LIMIT: 300M
+
+volumes:
+  phrase-db-volume:
