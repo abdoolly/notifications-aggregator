@@ -1,6 +1,5 @@
-import { Controller, Get, Inject } from '@nestjs/common';
-import { User } from '@notifications/models/user.model';
-import { Models } from 'src/helpers/constants';
+import { Controller, Get, Param, Query } from '@nestjs/common';
+import { NotificationsService } from '@notifications/notifications.service';
 
 /**
  * - The first endpoint will provide the functionality to retrieve an aggregated list of notifications 
@@ -11,10 +10,10 @@ import { Models } from 'src/helpers/constants';
  * 
  * 
  * 
- * mongo-db
- * caching
+ * mysql
  * apply security (cors ,using helmet)
  * health-check
+ * caching
  * 
  */
 
@@ -22,17 +21,18 @@ import { Models } from 'src/helpers/constants';
 export class NotificationsController {
 
   constructor(
-    @Inject(Models.USER)
-    private userRepo: typeof User,
+    private notificationService: NotificationsService
   ) { }
 
-  @Get('/')
-  async getHello() {
-    const user = await this.userRepo.create({
-      name: 'Abdallah Gamal'
+  @Get('/:postId')
+  async getNotificationFeed(
+    @Param('postId') postId: string,
+    @Query('page') page: number = 1,
+    @Query('pageSize') pageSize: number = 10) {
+    return await this.notificationService.getNotifications(postId, {
+      page: +page,
+      pageSize: +pageSize
     });
-
-    return user;
   }
 
 }
