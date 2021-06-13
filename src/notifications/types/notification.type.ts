@@ -1,10 +1,6 @@
 import { Post } from "@notifications/models/post.model";
 import { User } from "@notifications/models/user.model";
 
-export interface CreateNotificationI {
-
-}
-
 export interface NotificationI {
   id: string;
   notificationType: 'Like' | 'Comment';
