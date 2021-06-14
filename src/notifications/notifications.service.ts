@@ -84,7 +84,7 @@ export class NotificationsService {
   async doesUserExists(id: string) {
     const user = await this.userRepo.findOne({ where: { id } });
     if (!user)
-      throw new NotFoundException(`User with id ${id} does not exist`);
+      throw new BadRequestException(`User with id ${id} does not exist`);
   }
 
   async doesPostExists(id: string) {
