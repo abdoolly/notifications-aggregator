@@ -4,4 +4,3 @@ Things I would have implemented if I had more time
 - I would have also added a Dockerfile to be able to make the backend easily deployable anywhere.
 - If this system were to receive a lot of requests one of the easiest ways is to make a docker stack that can deploy multiple instances of the backend and it will automatically loadbalance the requests between them.
 - I would also have added a caching layer for the notification feed API.
-- I would have also added linting.
