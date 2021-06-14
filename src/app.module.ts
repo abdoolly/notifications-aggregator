@@ -12,6 +12,8 @@ import { Notification } from '@notifications/models/notification.model';
 import { Models } from 'src/helpers/constants';
 import { makeModelRepository } from 'src/helpers/dbHelpers';
 import * as sequelizePaginate from 'sequelize-paginate';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 const databaseProvider = [
   {
@@ -37,10 +39,20 @@ const databaseProvider = [
 ];
 
 @Module({
-  imports: [NotificationsModule],
+  imports: [
+    NotificationsModule,
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 15,
+    }),
+  ],
   controllers: [AppController],
   providers: [
     AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard
+    },
     ...databaseProvider,
     makeModelRepository(Models.NOTIFICATION, Notification),
     makeModelRepository(Models.USER, User),
@@ -54,6 +66,5 @@ const databaseProvider = [
     makeModelRepository(Models.COMMENT, Comment),
     makeModelRepository(Models.POST, Post),
   ],
-
 })
 export class AppModule { }
