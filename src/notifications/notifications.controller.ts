@@ -1,20 +1,9 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { NotificationsService } from '@notifications/notifications.service';
+import { AddNotificationFeedRequest } from '@notifications/types/controller.types';
 
-/**
- * - The first endpoint will provide the functionality to retrieve an aggregated list of notifications 
- * for a given post. We are looking for a response that is as close to production ready as possible.
- * 
- * - The second endpoint will expose a POST method that will add an element to this feed of notifications.
- * - The third and last endpoint should expose the functionality to mark these feeds as read.
- * 
- * 
- * 
- * mysql
- * apply security (cors ,using helmet)
- * health-check
+/** 
  * caching
- * 
  */
 
 @Controller('notifications')
@@ -35,4 +24,21 @@ export class NotificationsController {
     });
   }
 
+  @Post('/:postId')
+  async addNotificationFeed(@Param('postId') postId: string, @Body() body: AddNotificationFeedRequest) {
+    await this.notificationService.doesPostExists(postId);
+    await this.notificationService.doesUserExists(body.userId);
+    return await this.notificationService.createNotification({
+      postId,
+      userId: body.userId,
+      commentText: body.commentText,
+      type: body.type,
+    });
+  }
+
+  @Put('/:postId')
+  async markNotificationFeedAsRead(@Param('postId') postId: string) {
+    await this.notificationService.doesPostExists(postId);
+    return await this.notificationService.markAsRead(postId);
+  }
 }

@@ -1,13 +1,17 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Get, Inject } from '@nestjs/common';
+import { Sequelize } from 'sequelize-typescript';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) { }
+
+  constructor(
+    @Inject('SEQUELIZE')
+    private sequelize: Sequelize,
+  ) { }
 
   @Get('/health')
-  health() {
-    return;
+  async health() {
+    return await this.sequelize.authenticate();
   }
 
 }
