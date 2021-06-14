@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
-import { ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { NotificationsService } from '@notifications/notifications.service';
 import { AddNotificationFeedRequest } from '@notifications/types/controller.types';
 import { addNotificationCommentSuccess, addNotificationFailure, addNotificationValidationError, getNotificationFeedResponseFailure, getNotificationFeedResponseSuccess, markNotificationFeedAsReadError, markNotificationFeedAsReadSuccess } from 'src/data/swagger-data';
@@ -13,8 +13,8 @@ export class NotificationsController {
 
   @Get('/:postId')
   @ApiParam({ name: 'postId', example: '7d78ff348647b782cb3027d836d23e09' })
-  @ApiParam({ name: 'page', example: 1, required: false })
-  @ApiParam({ name: 'pageSize', example: 4, required: false })
+  @ApiQuery({ name: 'page', example: 1, required: false })
+  @ApiQuery({ name: 'pageSize', example: 4, required: false })
   @ApiResponse({
     status: 200,
     schema: {
