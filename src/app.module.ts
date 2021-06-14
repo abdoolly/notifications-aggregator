@@ -30,9 +30,9 @@ const databaseProvider = [
       });
       sequelize.addModels([User, Post, Comment, Notification]);
       sequelizePaginate.paginate(sequelize.models.Notification as any)
-      // await sequelize.sync({
-      //   alter: process.env.NODE_ENV === 'develop' ? true : false,
-      // });
+      await sequelize.sync({
+        alter: process.env.NODE_ENV === 'develop' ? true : false,
+      });
       return sequelize;
     },
   },
